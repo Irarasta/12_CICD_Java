@@ -12,6 +12,17 @@ jobs:
   my_first_job:
     runs-on: ubuntu-latest
 
+    services:
+      h2:
+        image: oscarfonts/h2
+        ports:
+          - 1521:1521
+        options: >-
+          --health-cmd "java -cp /opt/h2/bin/h2*.jar org.h2.tools.Server -ifNotExists -web -webAllowOthers -tcp -tcpAllowOthers -baseDir /h2-data"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
     - name: actions checkout
       uses: actions/checkout@v3
