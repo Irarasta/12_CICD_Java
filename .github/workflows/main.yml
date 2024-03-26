@@ -32,6 +32,12 @@ jobs:
       with:
         java-version: '17'
         distribution: 'zulu'
+    - name: Start H2 Database
+      run: |
+        java -cp h2/bin/h2*.jar org.h2.tools.Server -ifNotExists -web -webAllowOthers -tcp -tcpAllowOthers -baseDir ./ &
+
+    - name: Initialize Database
+      run: java -cp your-application.jar:./h2/bin/h2*.jar org.h2.tools.RunScript -script ./resources/sql/data.sql -url jdbc:h2:file:./productsDB -user sa -password ""
         
     - name: Install Dependencies
       run: 'mvn compile'
